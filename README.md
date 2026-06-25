@@ -18,7 +18,7 @@ Built as a take-home assignment demonstrating an **agentic workflow** (Option A)
 │  ┌──────────────────────────────────────────────────────────────┐  │
 │  │  1. PLANNER NODE  (agent/planner.py)                         │  │
 │  │                                                              │  │
-│  │  GPT-4o-mini analyses the query and produces:               │  │
+│  │  GPT-OSS 120B (via Groq) analyses the query and produces:  │  │
 │  │    • research_goal                                           │  │
 │  │    • sub_questions  [ Q1, Q2, Q3 ... ]                      │  │
 │  │    • tool_plan      [ {tool, input, reason}, ... ]          │  │
@@ -30,8 +30,8 @@ Built as a take-home assignment demonstrating an **agentic workflow** (Option A)
 │  │  2. AGENTIC TOOL-CALLING LOOP  (agent/agent.py)              │  │
 │  │                                                              │  │
 │  │   ┌─────────────────┐   tool calls    ┌──────────────────┐  │  │
-│  │   │   GPT-4o-mini   │ ◄────────────── │ Tool Dispatcher  │  │  │
-│  │   │   (Reasoning)   │ ──────────────► │                  │  │  │
+│  │   │  GPT-OSS 120B   │ ◄────────────── │ Tool Dispatcher  │  │  │
+│  │   │  via Groq API   │ ──────────────► │                  │  │  │
 │  │   └─────────────────┘   tool results  └────────┬─────────┘  │  │
 │  │                                                │             │  │
 │  │                              ┌─────────────────┴──────────┐  │  │
@@ -71,10 +71,10 @@ Built as a take-home assignment demonstrating an **agentic workflow** (Option A)
 │  ┌──────────────────────────────────────────────────────────────┐  │
 │  │  5. CONFIDENCE SCORING  (agent/confidence.py)                │  │
 │  │                                                              │  │
-│  │   Source quantity (25) + Source diversity (20)              │  │
-│  │ + Finding depth (20)   + Tool coverage (20)                 │  │
-│  │ + Summary quality (15) = score / 100                        │  │
-│  │   → label: Very High / High / Medium / Low / Very Low       │  │
+│  │   Source credibility (25) + Source diversity (20)          │  │
+│  │ + Finding depth (20)      + Tool coverage (20)             │  │
+│  │ + Summary quality (15)    = score / 100                    │  │
+│  │   → label: Very High / High / Medium / Low / Very Low      │  │
 │  └───────────────────────────┬──────────────────────────────────┘  │
 │                               │                                     │
 │                               ▼                                     │
