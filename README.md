@@ -2,7 +2,6 @@
 
 An autonomous research agent that takes a natural language query, plans its approach, calls multiple tools, and returns a structured report with confidence scoring.
 
-Built as a take-home assignment demonstrating an **agentic workflow** (Option A).
 
 ---
 
