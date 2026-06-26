@@ -34,6 +34,8 @@ SYSTEM_PROMPT = """You are an expert research assistant. A research plan has bee
 provided to you. Follow it as closely as possible:
 
 1. Call `web_search` and `wikipedia_lookup` as specified in the plan.
+   IMPORTANT: only these two exact tool names exist — 'web_search' and 'wikipedia_lookup'.
+   Never use any other name (e.g. not 'wiki_lookup', 'search', 'lookup', etc.).
 2. You may add extra tool calls if you need more data.
 3. After gathering enough information, produce a structured research report in the
    following JSON format (output ONLY valid JSON, no markdown fences):
@@ -151,16 +153,18 @@ class ResearchAgent:
                         and "tool_use_failed" in str(exc)
                     )
                     if is_tool_use_failed and attempt < MAX_RETRIES - 1:
-                        logger.log("Error", f"Malformed tool call (attempt {attempt+1}), retrying…")
+                        logger.log("Error", f"Invalid tool call (attempt {attempt+1}), retrying…")
                         # Remove the bad assistant message if it was appended
-                        if messages and messages[-1].get("role") == "assistant":
+                        if messages and getattr(messages[-1], "role", None) == "assistant":
                             messages.pop()
-                        # Nudge the model to use correct JSON syntax
+                        # Tell the model exactly which tool names are valid
                         messages.append({
                             "role": "user",
                             "content": (
-                                "Your previous tool call had malformed JSON. "
-                                "Please call the tool again using strictly valid JSON arguments."
+                                "Your previous tool call used an invalid tool name. "
+                                "You MUST only call tools from this exact list: "
+                                "'web_search' and 'wikipedia_lookup'. "
+                                "Do not abbreviate or rename them. Try again."
                             ),
                         })
                     else:
