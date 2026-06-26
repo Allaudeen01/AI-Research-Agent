@@ -113,8 +113,8 @@ class ResearchAgent:
             detail=f"Goal: {plan.get('research_goal', query)}",
         )
 
-        # Embed the plan into the first user message so the agent follows it
-        plan_text = json.dumps(plan, indent=2)
+        # Embed the plan compactly (no indent = fewer tokens)
+        plan_text = json.dumps(plan)
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT},
             {
@@ -193,8 +193,8 @@ class ResearchAgent:
                 else:
                     try:
                         result = TOOL_FUNCTIONS[fn_name](**fn_args)
-                        # Brief result preview in the log
-                        preview = str(result)[:180].replace("\n", " ")
+                        # Brief result preview in the log (not sent to model)
+                        preview = str(result)[:150].replace("\n", " ")
                         logger.for_tool(fn_name, f"{fn_name} returned results", detail=preview)
                     except Exception as exc:
                         result = {"error": str(exc)}

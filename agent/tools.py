@@ -27,7 +27,7 @@ def web_search(query: str) -> dict:
         "api_key": api_key,
         "query": query,
         "search_depth": "basic",
-        "max_results": 5,
+        "max_results": 3,          # 3 results keeps context well under TPM limits
         "include_answer": True,
     }).encode("utf-8")
 
@@ -50,7 +50,7 @@ def web_search(query: str) -> dict:
             "type": "web_result",
             "title": r.get("title", ""),
             "url": r.get("url", ""),
-            "content": r.get("content", "")[:600],
+            "content": r.get("content", "")[:250],  # trimmed to save tokens
         })
 
     return {"query": query, "results": results}
@@ -75,7 +75,7 @@ def wikipedia_lookup(topic: str) -> dict:
         return {
             "topic": topic,
             "title": data.get("title", ""),
-            "summary": data.get("extract", "No summary available."),
+            "summary": data.get("extract", "No summary available.")[:400],  # trimmed
             "url": data.get("content_urls", {}).get("desktop", {}).get("page", ""),
         }
     except Exception as e:
