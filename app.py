@@ -7,8 +7,15 @@ Run with:
 
 import streamlit as st
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
+
+# Streamlit Cloud: inject secrets into environment if not already set
+# (locally .env is used; on Streamlit Cloud st.secrets is used)
+for key in ["GROQ_API_KEY", "OPENAI_API_KEY", "TAVILY_API_KEY", "LLM_PROVIDER", "GROQ_MODEL"]:
+    if not os.environ.get(key) and key in st.secrets:
+        os.environ[key] = st.secrets[key]
 
 from agent.agent import ResearchAgent
 from agent.logger import STAGE_ICONS
